@@ -239,7 +239,22 @@ int do_domainname(int nargs, char **args)
 
 int do_exec(int nargs, char **args)
 {
-    return -1;
+    const int cmd_line_max = 256;
+    char cmd_line[cmd_line_max];
+    int cmd_length, i;
+    
+    cmd_line[0] = '\0';
+    cmd_length = 0;
+    
+    for(i = 1; i < nargs; i++)
+    {
+	cmd_length += (strlen(args[i]) + 2);
+	if(cmd_length >= cmd_line_max) return -1;
+	strcat(cmd_line, args[i]);
+	strcat(cmd_line, " ");
+    }
+	
+    return system(cmd_line);
 }
 
 int do_export(int nargs, char **args)

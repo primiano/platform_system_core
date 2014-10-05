@@ -93,6 +93,7 @@ struct {
     { "persist.security.", AID_SYSTEM,   0 },
     { "persist.service.bdroid.", AID_BLUETOOTH,   0 },
     { "selinux."         , AID_SYSTEM,   0 },
+    { "persist.audio.device", AID_SYSTEM,   0 },
     { NULL, 0, 0 }
 };
 
@@ -107,6 +108,7 @@ struct {
 } control_perms[] = {
     { "dumpstate",AID_SHELL, AID_LOG },
     { "ril-daemon",AID_RADIO, AID_RADIO },
+    { "pppd_gprs", AID_RADIO, AID_RADIO },
      {NULL, 0, 0 }
 };
 
@@ -327,6 +329,7 @@ static void write_persistent_property(const char *name, const char *value)
     }
     write(fd, value, strlen(value));
     close(fd);
+    sync();
 
     snprintf(path, sizeof(path), "%s/%s", PERSISTENT_PROPERTY_DIR, name);
     if (rename(tempPath, path)) {
